@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import userRouter from "./routes/user-routes.js";
 
 dotenv.config();
 
@@ -18,6 +20,17 @@ app.use((req, res, next) => {
   next();
 });
 
-const { PORT } = process.env;
+app.use("/user", userRouter);
 
-app.listen(PORT, () => console.log(`App is running on ${PORT}`));
+const { PORT, MONGODB_PASSWORD } = process.env;
+
+mongoose
+  .connect(
+    `mongodb+srv://admin:${MONGODB_PASSWORD}@cluster0.g7oq6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+  )
+  .then(() =>
+    app.listen(PORT, () =>
+      console.log(`DB is connected and app is running on port ${PORT}`)
+    )
+  )
+  .catch((e) => console.log(e));
