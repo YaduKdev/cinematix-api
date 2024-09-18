@@ -1,3 +1,4 @@
+import Booking from "../models/Booking.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
@@ -6,8 +7,8 @@ export const getAllUsers = async (req, res, next) => {
 
   try {
     users = await User.find();
-  } catch (error) {
-    return console.log(error);
+  } catch (err) {
+    return console.log(err);
   }
 
   if (!users) {
@@ -37,8 +38,8 @@ export const signup = async (req, res, next) => {
   try {
     user = new User({ name, email, password: hashedPassword });
     user = await user.save();
-  } catch (error) {
-    return console.log(error);
+  } catch (err) {
+    return console.log(err);
   }
 
   if (!user) {
@@ -55,19 +56,19 @@ export const login = async (req, res, next) => {
     return res.status(422).json({ message: "Invalid Inputs" });
   }
 
-  let user;
+  let existingUser;
 
   try {
-    user = await User.findOne({ email });
-  } catch (error) {
-    return console.log(error);
+    existingUser = await User.findOne({ email });
+  } catch (err) {
+    return console.log(err);
   }
 
-  if (!user) {
+  if (!existingUser) {
     return res.status(500).json({ message: "User doesn't exist" });
   }
 
-  const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+  const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
 
   if (!isPasswordCorrect) {
     return res.status(400).json({ message: "Incorrect Password" });
@@ -126,4 +127,21 @@ export const deleteUser = async (req, res, next) => {
   }
 
   return res.status(200).json({ message: "Deleted Successfully" });
+};
+
+export const getUserBookings = async (req, res, next) => {
+  const id = req.params.id;
+  let userBookings;
+
+  try {
+    userBookings = await Booking.find({ user: id });
+  } catch (err) {
+    return console.log(err);
+  }
+
+  if (!userBookings) {
+    return res.status(500).json({ message: "Unable To Get Bookings" });
+  }
+
+  return res.status(200).json({ userBookings });
 };

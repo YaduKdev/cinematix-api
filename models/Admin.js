@@ -2,11 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
+const adminSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -17,7 +13,12 @@ const userSchema = new Schema({
     required: true,
     minLength: 6,
   },
-  bookings: [{ type: mongoose.Types.ObjectId, ref: "Booking" }],
+  addedMovies: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Movie",
+    },
+  ],
 });
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model("Admin", adminSchema);
