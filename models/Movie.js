@@ -11,7 +11,31 @@ const movieSchema = new Schema({
     type: String,
     required: true,
   },
-  actors: [{ type: String, required: true }],
+  language: {
+    type: String,
+    required: true,
+  },
+  genre: {
+    type: String,
+    required: true,
+  },
+  nowPlaying: [
+    {
+      type: {
+        name: { type: String },
+        bookedSeats: [{ type: Number }],
+      },
+    },
+  ],
+  actors: [
+    {
+      type: {
+        name: { type: String },
+        imageUrl: { type: String },
+      },
+      required: true,
+    },
+  ],
   releaseDate: {
     type: Date,
     required: true,

@@ -23,18 +23,30 @@ export const addMovie = async (req, res, next) => {
   });
 
   //create new movie
-  const { title, description, actors, releaseDate, posterUrl, featured } =
-    req.body;
+  const {
+    title,
+    description,
+    language,
+    genre,
+    actors,
+    releaseDate,
+    posterUrl,
+    featured,
+  } = req.body;
 
   if (
-    !title &&
-    title.trim() === "" &&
-    !description &&
-    description.trim() === "" &&
-    !posterUrl &&
-    posterUrl.trim() === ""
+    !title ||
+    title.trim() === "" ||
+    !description ||
+    description.trim() === "" ||
+    !posterUrl ||
+    posterUrl.trim() === "" ||
+    !language ||
+    language.trim() === "" ||
+    !genre ||
+    genre.trim() === ""
   ) {
-    res.status(422).json({ message: "Invalid Inputs" });
+    return res.status(422).json({ message: "Invalid Inputs" });
   }
 
   let movie;
@@ -43,6 +55,8 @@ export const addMovie = async (req, res, next) => {
     movie = new Movie({
       title,
       description,
+      language,
+      genre,
       actors,
       releaseDate: new Date(`${releaseDate}`),
       posterUrl,
