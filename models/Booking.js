@@ -12,9 +12,12 @@ const bookingSchema = new Schema({
     type: Date,
     required: true,
   },
-  seatNumber: {
-    type: Number,
-    required: true,
+  movieTheater: {
+    type: {
+      name: { type: String },
+      location: { type: String },
+      seatNumbers: [{ type: Number }],
+    },
   },
   user: {
     type: mongoose.Types.ObjectId,

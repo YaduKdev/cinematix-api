@@ -4,7 +4,7 @@ import Movie from "../models/Movie.js";
 import User from "../models/User.js";
 
 export const newBooking = async (req, res, next) => {
-  const { movie, date, seatNumber, user } = req.body;
+  const { movie, date, movieTheater, user } = req.body;
 
   let existingMovie;
   let existingUser;
@@ -30,7 +30,7 @@ export const newBooking = async (req, res, next) => {
     booking = new Booking({
       movie,
       date: new Date(`${date}`),
-      seatNumber,
+      movieTheater,
       user,
     });
 

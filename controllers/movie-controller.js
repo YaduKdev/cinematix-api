@@ -32,6 +32,7 @@ export const addMovie = async (req, res, next) => {
     releaseDate,
     posterUrl,
     featured,
+    cities,
   } = req.body;
 
   if (
@@ -44,7 +45,9 @@ export const addMovie = async (req, res, next) => {
     !language ||
     language.trim() === "" ||
     !genre ||
-    genre.trim() === ""
+    genre.trim() === "" ||
+    !cities ||
+    cities.trim() === ""
   ) {
     return res.status(422).json({ message: "Invalid Inputs" });
   }
@@ -61,6 +64,7 @@ export const addMovie = async (req, res, next) => {
       releaseDate: new Date(`${releaseDate}`),
       posterUrl,
       featured,
+      cities,
       admin: adminId,
     });
 

@@ -22,8 +22,8 @@ const movieSchema = new Schema({
   nowPlaying: [
     {
       type: {
-        name: { type: String },
-        bookedSeats: [{ type: Number }],
+        names: [{ type: String }],
+        location: { type: String },
       },
     },
   ],
@@ -53,6 +53,7 @@ const movieSchema = new Schema({
     ref: "Admin",
     required: true,
   },
+  cities: [{ type: String, required: true }],
 });
 
 export default mongoose.model("Movie", movieSchema);
