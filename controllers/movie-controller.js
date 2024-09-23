@@ -33,6 +33,9 @@ export const addMovie = async (req, res, next) => {
     posterUrl,
     featured,
     cities,
+    rating,
+    nowPlaying,
+    bookingsOpen,
   } = req.body;
 
   if (
@@ -47,7 +50,9 @@ export const addMovie = async (req, res, next) => {
     !genre ||
     genre.trim() === "" ||
     !cities ||
-    cities.trim() === ""
+    cities.trim() === "" ||
+    !rating ||
+    rating.trim() === ""
   ) {
     return res.status(422).json({ message: "Invalid Inputs" });
   }
@@ -66,6 +71,9 @@ export const addMovie = async (req, res, next) => {
       featured,
       cities,
       admin: adminId,
+      rating,
+      nowPlaying,
+      bookingsOpen,
     });
 
     const session = await mongoose.startSession();
