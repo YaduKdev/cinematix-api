@@ -36,6 +36,7 @@ export const addMovie = async (req, res, next) => {
     rating,
     nowPlaying,
     bookingsOpen,
+    trailerLink,
   } = req.body;
 
   if (
@@ -50,7 +51,7 @@ export const addMovie = async (req, res, next) => {
     !genre ||
     genre.trim() === "" ||
     !cities ||
-    cities.trim() === "" ||
+    cities.length === 0 ||
     !rating ||
     rating.trim() === ""
   ) {
@@ -74,6 +75,7 @@ export const addMovie = async (req, res, next) => {
       rating,
       nowPlaying,
       bookingsOpen,
+      trailerLink,
     });
 
     const session = await mongoose.startSession();

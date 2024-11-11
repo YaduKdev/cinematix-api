@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 import Booking from "../models/Booking.js";
 import Movie from "../models/Movie.js";
 import User from "../models/User.js";
+import Stripe from "stripe";
+
+const stripe = new Stripe(
+  "sk_test_51JLbgaSDLb6EOYBq7Y9uY23KQvUtr86bs5CBDvWq3KOlqCFvyTXnMMxXgU8EkNvcvrJM6y3Z6AqFcJBdPmEm5TMR00yxnypRm6"
+);
 
 export const newBooking = async (req, res, next) => {
   const { movie, date, movieTheater, user } = req.body;
@@ -99,4 +104,31 @@ export const deleteBooking = async (req, res, next) => {
   }
 
   return res.status(200).json({ message: "Successfully Deleted" });
+};
+
+export const handleCheckout = async (req, res) => {
+  const { seats } = req.body;
+
+  const lineItems = [
+    {
+      price_data: {
+        currency: "inr",
+        product_data: { name: `${seats.totalSeats} seats` },
+        unit_amount: seats.totalAmount * 100,
+      },
+      quantity: 1,
+    },
+  ];
+
+  // console.log(JSON.stringify(lineItems.price_data.product_data));
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: lineItems,
+    mode: "payment",
+    success_url: "https://www.google.co.in/",
+    cancel_url: "https://www.youtube.com/",
+  });
+
+  res.json({ id: session.id });
 };
