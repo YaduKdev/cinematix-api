@@ -16,7 +16,9 @@ const bookingSchema = new Schema({
     type: {
       name: { type: String },
       location: { type: String },
-      seatNumbers: [{ type: Number }],
+      seatNumbers: [{ type: String }],
+      date: { type: String },
+      time: { type: String },
     },
   },
   user: {
@@ -24,6 +26,7 @@ const bookingSchema = new Schema({
     ref: "User",
     required: true,
   },
+  sessionId: { type: String, required: true },
 });
 
 export default mongoose.model("Booking", bookingSchema);

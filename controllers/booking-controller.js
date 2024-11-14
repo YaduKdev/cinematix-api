@@ -9,7 +9,7 @@ const stripe = new Stripe(
 );
 
 export const newBooking = async (req, res, next) => {
-  const { movie, date, movieTheater, user } = req.body;
+  const { movie, movieTheater, user, sessionId } = req.body;
 
   let existingMovie;
   let existingUser;
@@ -34,9 +34,10 @@ export const newBooking = async (req, res, next) => {
   try {
     booking = new Booking({
       movie,
-      date: new Date(`${date}`),
+      date: new Date(),
       movieTheater,
       user,
+      sessionId,
     });
 
     const session = await mongoose.startSession();
@@ -120,15 +121,14 @@ export const handleCheckout = async (req, res) => {
     },
   ];
 
-  // console.log(JSON.stringify(lineItems.price_data.product_data));
-
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
-    success_url: "https://www.google.co.in/",
-    cancel_url: "https://www.youtube.com/",
+    success_url:
+      "http://localhost:5173/booking/transaction-success?session_id={CHECKOUT_SESSION_ID}",
+    cancel_url: "http://localhost:5173/booking/transaction-fail",
   });
 
-  res.json({ id: session.id });
+  return res.json({ id: session.id });
 };
