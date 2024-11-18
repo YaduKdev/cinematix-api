@@ -19,6 +19,8 @@ const bookingSchema = new Schema({
       seatNumbers: [{ type: String }],
       date: { type: String },
       time: { type: String },
+      movieName: { type: String },
+      poster: { type: String },
     },
   },
   user: {

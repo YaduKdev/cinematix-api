@@ -6,10 +6,12 @@ import {
   updateUser,
   deleteUser,
   getUserBookings,
+  getUserByID,
 } from "../controllers/user-controller.js";
 
 const userRouter = express.Router();
 userRouter.get("/", getAllUsers);
+userRouter.get("/:id", getUserByID);
 userRouter.post("/signup", signup);
 userRouter.post("/login", login);
 userRouter.put("/:id", updateUser);

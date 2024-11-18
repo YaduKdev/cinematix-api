@@ -18,6 +18,23 @@ export const getAllUsers = async (req, res, next) => {
   return res.status(200).json({ users });
 };
 
+export const getUserByID = async (req, res, next) => {
+  let user;
+  let id = req.params.id;
+
+  try {
+    user = await User.findById(id);
+  } catch (err) {
+    return console.log(err);
+  }
+
+  if (!user) {
+    return res.status(500).json({ message: "Unexpected error occured" });
+  }
+
+  return res.status(200).json({ user });
+};
+
 export const signup = async (req, res, next) => {
   const { name, email, password } = req.body;
 
