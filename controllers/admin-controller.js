@@ -1,4 +1,5 @@
 import Admin from "../models/Admin.js";
+import Movie from "../models/Movie.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -16,6 +17,23 @@ export const getAdmins = async (req, res, next) => {
   }
 
   return res.status(200).json({ admins });
+};
+
+export const getAdminById = async (req, res, next) => {
+  let admin;
+  let id = req.params.id;
+
+  try {
+    admin = await Admin.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!admin) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+
+  return res.status(200).json({ admin });
 };
 
 export const addAdmin = async (req, res, next) => {
@@ -89,4 +107,21 @@ export const adminLogin = async (req, res, next) => {
   return res
     .status(200)
     .json({ message: "Authentication Complete", token, id: existingAdmin._id });
+};
+
+export const getAdminMovies = async (req, res, next) => {
+  const id = req.params.id;
+  let adminMovies;
+
+  try {
+    adminMovies = await Movie.find({ admin: id });
+  } catch (err) {
+    return console.log(err);
+  }
+
+  if (!adminMovies) {
+    return res.status(500).json({ message: "Unable To Get Movies" });
+  }
+
+  return res.status(200).json({ adminMovies });
 };
