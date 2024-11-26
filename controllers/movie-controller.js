@@ -122,7 +122,7 @@ export const getMovieById = async (req, res, next) => {
   try {
     movie = await Movie.findById(id);
   } catch (err) {
-    return console.log(err);
+    console.log(err);
   }
 
   if (!movie) {
