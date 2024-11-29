@@ -3,10 +3,11 @@ import Booking from "../models/Booking.js";
 import Movie from "../models/Movie.js";
 import User from "../models/User.js";
 import Stripe from "stripe";
+import dotenv from "dotenv";
 
-const stripe = new Stripe(
-  "sk_test_51JLbgaSDLb6EOYBq7Y9uY23KQvUtr86bs5CBDvWq3KOlqCFvyTXnMMxXgU8EkNvcvrJM6y3Z6AqFcJBdPmEm5TMR00yxnypRm6"
-);
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const newBooking = async (req, res, next) => {
   const { movie, movieTheater, user, sessionId } = req.body;
@@ -114,7 +115,12 @@ export const handleCheckout = async (req, res) => {
     {
       price_data: {
         currency: "inr",
-        product_data: { name: `${seats.totalSeats} seats` },
+        product_data: {
+          name: `${seats.totalSeats} ${
+            seats.totalSeats > 1 ? "Seats" : "Seat"
+          }`,
+          images: ["https://i.ibb.co/mT6w3Pq/logo.png"],
+        },
         unit_amount: seats.totalAmount * 100,
       },
       quantity: 1,
@@ -125,6 +131,12 @@ export const handleCheckout = async (req, res) => {
     payment_method_types: ["card"],
     line_items: lineItems,
     mode: "payment",
+    custom_text: {
+      submit: {
+        message:
+          "Use Card Number: 4000003560000008. Add Any 3 Digit CVC And Upcoming Expiry Date And Select Country India",
+      },
+    },
     success_url:
       "http://localhost:5173/booking/transaction-success?session_id={CHECKOUT_SESSION_ID}",
     cancel_url: "http://localhost:5173/booking/transaction-fail",

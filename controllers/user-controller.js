@@ -1,6 +1,11 @@
 import Booking from "../models/Booking.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import { oauth2client } from "../utils/googleConfig.js";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const getAllUsers = async (req, res, next) => {
   let users;
@@ -163,4 +168,32 @@ export const getUserBookings = async (req, res, next) => {
   }
 
   return res.status(200).json({ userBookings });
+};
+
+export const googleLogin = async (req, res, next) => {
+  const { code } = req.query;
+
+  try {
+    const googleRes = await oauth2client.getToken(code);
+
+    oauth2client.setCredentials(googleRes.tokens);
+
+    const userRes = await axios.get(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+    );
+
+    if (!userRes.data) {
+      return res.status(500).json({ message: "Unable To Get User Data" });
+    }
+
+    const resData = {
+      name: userRes.data.name,
+      email: userRes.data.email,
+      password: process.env.GOOGLE_PASS,
+    };
+
+    return res.status(200).json({ resData });
+  } catch (err) {
+    return console.log(err);
+  }
 };
