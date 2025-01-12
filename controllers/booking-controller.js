@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const { URL } = process.env;
+
 const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const newBooking = async (req, res, next) => {
@@ -137,9 +139,8 @@ export const handleCheckout = async (req, res) => {
           "Use Card Number: 4000003560000008. Add Any 3 Digit CVC And Upcoming Expiry Date And Select Country India",
       },
     },
-    success_url:
-      "http://localhost:5173/booking/transaction-success?session_id={CHECKOUT_SESSION_ID}",
-    cancel_url: "http://localhost:5173/booking/transaction-fail",
+    success_url: `${URL}/booking/transaction-success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${URL}/booking/transaction-fail`,
   });
 
   return res.json({ id: session.id });
