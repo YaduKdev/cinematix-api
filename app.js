@@ -39,4 +39,4 @@ mongoose
       console.log(`DB is connected and app is running on port ${PORT}`)
     )
   )
-  .catch((e) => console.log(e));
+  .catch((e) => console.log("Database connection failed:", e));
