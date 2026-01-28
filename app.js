@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 
-const { PORT, MONGODB_PASSWORD, URL } = process.env;
+const { PORT = 5000, MONGODB_PASSWORD, URL } = process.env;
 
 //middlewares
 app.use(express.json());
