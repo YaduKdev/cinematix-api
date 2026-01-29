@@ -139,8 +139,8 @@ export const handleCheckout = async (req, res) => {
           "Use Card Number: 4000003560000008. Add Any 3 Digit CVC And Upcoming Expiry Date And Select Country India",
       },
     },
-    success_url: `${URL}/booking/transaction-success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${URL}/booking/transaction-fail`,
+    success_url: `${URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${URL}/fail`,
   });
 
   return res.json({ id: session.id });
